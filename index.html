@@ -58,7 +58,39 @@
   Drop this into a Blogger HTML/JavaScript gadget. It's self-contained
   (scoped under #bs4k) so it won't collide with your theme's CSS/JS.
 -->
+<div style="text-align: center; margin: 25px 0 15px;">
+  <button id="btnOpenNewsPlayer" type="button" style="background: linear-gradient(135deg, #ff007f, #7928ca); color: #fff; border: none; padding: 14px 24px; font-size: 15px; font-weight: 700; border-radius: 30px; cursor: pointer; box-shadow: 0 4px 15px rgba(255,0,127,0.3); transition: transform 0.2s, box-shadow 0.2s; text-transform: uppercase; letter-spacing: 0.05em; width: 100%; max-width: 400px;">
+    📺 24HRS SPORTS NEWS WATCH LIVE
+  </button>
+</div>
 
+<div class="player-wrap" id="newsPlayerSection" style="display: none; margin-top: 15px; margin-bottom: 30px;">
+  <div class="video-shell" id="playerShell" tabindex="0">
+    <span class="status-pill" id="statusPill"><span class="dot"></span><span id="statusText">Idle</span></span>
+    <video id="video" playsinline></video>
+    <div class="overlay" id="overlay">
+      <div class="spinner"></div>
+      <div id="overlayText">Connecting to stream…</div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button id="btnPlay" type="button">▶ Play/Pause</button>
+    <button id="btnMute" type="button">🔇 Mute</button>
+    <button id="btnPip" type="button">⧉ PiP</button>
+    <button id="btnFullscreen" type="button">⛶ Fullscreen</button>
+    <button id="btnRetry" type="button">↻ Retry</button>
+  </div>
+
+  <div class="channel-grid-wrap" style="margin-top: 20px;">
+    <p style="font-size: 13px; color: #8a93a6; margin-bottom: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.03em;">📺 Select Channel to Watch:</p>
+    <div id="channelGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 12px; max-height: 250px; overflow-y: auto; padding-right: 5px; scrollbar-width: thin;">
+      <div style="color: #8a93a6; font-size: 13px; padding: 20px; text-align: center; grid-column: 1/-1;">Loading channels…</div>
+    </div>
+  </div>
+</div>
+
+  
 <style>
 :root{
   --bg:#05060a; --bg2:#0a0d16; --glass:rgba(255,255,255,.04); --glass-brd:rgba(255,255,255,.09);
@@ -825,6 +857,8 @@
 </script>
 
 <!-- GitHub Pages only enhancements: service worker, install prompt, update checker -->
-<script src="assets/js/github-enhancements.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hls.js/1.5.15/hls.min.js"></script>
+<script src="Reusable HLS Video Player/player.js"></script>
+
 </body>
 </html>

@@ -63,6 +63,7 @@ class HlsPlayer {
       });
     });
 
+    // 🌟 এই রিকভারি এবং Fatal Error লজিকটি আবার নিখুঁতভাবে ফিরিয়ে আনা হয়েছে
     this.hls.on(Hls.Events.ERROR, (_evt, data) => {
       if (!data.fatal) return;
       
@@ -109,7 +110,7 @@ class HlsPlayer {
       return;
     }
     
-    const delay = Math.min(1000 * Math.pow(2, this.retryCount), 15000); // Exponential backoff
+    const delay = Math.min(1000 * Math.pow(2, this.retryCount), 15000); 
     this.retryCount += 1;
     
     clearTimeout(this.retryTimer);
@@ -132,7 +133,6 @@ class HlsPlayer {
       this.hls = null;
     }
 
-    // Clean listeners for Native HTML5 Elements
     this.video.removeEventListener("loadedmetadata", this._handleNativeLoad);
     this.video.removeEventListener("error", this._handleNativeError);
     this.video.src = "";
@@ -149,12 +149,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const statusText = document.getElementById("statusText");
   const playerShell = document.getElementById("playerShell");
 
-  // Fallback testing URL (Swap this with your live endpoint)
-  const STREAM_URL = "https://iptv-org.github.io/iptv/categories/sports.m3u";
+  // গ্লোবাল স্টেট
+  let player = null;
+  let channelsLoaded = false;
 
   function updateUIStatus(status, message) {
-    statusPill.className = "status-pill"; // reset classes
-    
+    statusPill.className = "status-pill";
     if (status === "live") statusPill.classList.add("live");
     if (status === "idle") statusPill.classList.add("ok");
     
@@ -168,17 +168,11 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  const player = new HlsPlayer({
-    videoEl: video,
-    src: STREAM_URL,
-    onStatusChange: updateUIStatus
-  });
-
-  player.load();
-
   // Network Connectivity Triggers
   window.addEventListener("offline", () => updateUIStatus("error", "Disconnect: Check your network."));
-  window.addEventListener("online", () => player.retryNow());
+  window.addEventListener("online", () => {
+    if (player) player.retryNow();
+  });
 
   /* Event Button Triggers */
   document.getElementById("btnPlay").addEventListener("click", () => {
@@ -190,7 +184,9 @@ document.addEventListener("DOMContentLoaded", () => {
     e.target.textContent = video.muted ? "🔊 Unmute" : "🔇 Mute";
   });
 
-  document.getElementById("btnRetry").addEventListener("click", () => player.retryNow());
+  document.getElementById("btnRetry").addEventListener("click", () => {
+    if (player) player.retryNow();
+  });
 
   document.getElementById("btnFullscreen").addEventListener("click", () => {
     if (!document.fullscreenElement) {
@@ -210,12 +206,11 @@ document.addEventListener("DOMContentLoaded", () => {
     } catch { /* Fail silently if unsupported */ }
   });
 
-    // --- ২৪ ঘণ্টা স্পোর্টস নিউজ বাটন ও চ্যানেল লোড লজিক ---
+  // --- ২৪ ঘণ্টা স্পোর্টস নিউজ বাটন ও চ্যানেল গ্রিড লজিক ---
   const btnOpenNewsPlayer = document.getElementById("btnOpenNewsPlayer");
   const newsPlayerSection = document.getElementById("newsPlayerSection");
-  let channelsLoaded = false;
 
-   // ১. .m3u প্লেলিস্ট ফাইল ভেঙে নাম ও লিঙ্ক আলাদা করার সহকারী ফাংশন
+  // ১. .m3u প্লেলিস্ট ফাইল ভেঙে নাম ও লিঙ্ক আলাদা করার সহকারী ফাংশন
   function parseM3U(data) {
     const lines = data.split('\n');
     const channels = [];
@@ -237,11 +232,17 @@ document.addEventListener("DOMContentLoaded", () => {
     return channels;
   }
 
-  // ২. মেইন ফাংশন: যা ডাটা এনে স্ক্রিনে সুন্দর গ্রিড কার্ড সাজিয়ে দেয়
+  // ২. মেইন ফাংশন: source.txt থেকে মেইন লিঙ্ক এনে গ্রিড কার্ড সাজিয়ে দেয়
   async function loadChannels() {
-    const SOURCE_URL = "https://iptv-org.github.io/iptv/categories/sports.m3u"; 
-    
     try {
+      const sourceResponse = await fetch("./source.txt");
+      const SOURCE_URL = (await sourceResponse.text()).trim();
+
+      if (!SOURCE_URL || !SOURCE_URL.startsWith("http")) {
+        console.error("Invalid URL in source.txt");
+        return;
+      }
+
       const response = await fetch(SOURCE_URL);
       const textData = await response.text();
       let channels = [];
@@ -249,7 +250,6 @@ document.addEventListener("DOMContentLoaded", () => {
       const channelGrid = document.getElementById("channelGrid");
       if (!channelGrid) return;
 
-      // লিঙ্ক চেক করে ডাটা পার্স করা (JSON নাকি M3U তা নিজে বুঝবে)
       if (SOURCE_URL.endsWith('.m3u') || textData.includes('#EXTM3U')) {
         channels = parseM3U(textData);
       } else {
@@ -263,11 +263,9 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      // লুপ চালিয়ে প্রতিটা চ্যানেলের জন্য প্রিমিয়াম অ্যাপ স্টাইল কার্ড বানানো
       channels.forEach((channel) => {
         const card = document.createElement("div");
         
-        // কার্ডের স্টাইলিং (লুক অ্যান্ড ফিল)
         card.style.background = "rgba(255, 255, 255, 0.04)";
         card.style.border = "1px solid rgba(255, 255, 255, 0.08)";
         card.style.borderRadius = "12px";
@@ -288,7 +286,6 @@ document.addEventListener("DOMContentLoaded", () => {
           </div>
         `;
 
-        // হোভার ইফেক্টস
         card.addEventListener("mouseenter", () => {
           card.style.background = "rgba(0, 229, 255, 0.1)";
           card.style.borderColor = "var(--accent)";
@@ -300,7 +297,6 @@ document.addEventListener("DOMContentLoaded", () => {
           card.style.transform = "scale(1)";
         });
 
-        // ক্লিকে প্লেয়ার লোড করার লজিক
         card.addEventListener("click", () => {
           Array.from(channelGrid.children).forEach(c => {
             c.style.boxShadow = "none";
@@ -316,7 +312,6 @@ document.addEventListener("DOMContentLoaded", () => {
         channelGrid.appendChild(card);
       });
 
-      // প্রথম চ্যানেলটি অটো-প্লে ট্রিগার করা
       if (channelGrid.children.length > 0) {
         channelGrid.children[0].click();
       }
@@ -330,17 +325,15 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // ৩. প্লেয়ার স্টার্ট করার ফাংশন
   function playChannel(url) {
     if (player) player.destroy();
     player = new HlsPlayer({ videoEl: video, src: url, onStatusChange: updateUIStatus });
     player.load();
   }
 
-
   if (btnOpenNewsPlayer && newsPlayerSection) {
     btnOpenNewsPlayer.addEventListener("click", () => {
-      if (newsPlayerSection.style.display === "none") {
+      if (newsPlayerSection.style.display === "none" || newsPlayerSection.style.display === "") {
         newsPlayerSection.style.display = "block";
         newsPlayerSection.scrollIntoView({ behavior: 'smooth' });
         
@@ -356,29 +349,18 @@ document.addEventListener("DOMContentLoaded", () => {
         newsPlayerSection.style.display = "none";
         if (player) {
           player.destroy();
-          channelsLoaded = false;
+          player = null;
         } else if (video) {
           video.pause();
           video.src = "";
-          channelsLoaded = false;
         }
+        channelsLoaded = false;
         btnOpenNewsPlayer.textContent = "📺 24HRS SPORTS NEWS WATCH LIVE";
         btnOpenNewsPlayer.style.background = "linear-gradient(135deg, #ff007f, #7928ca)";
       }
     });
   }
 
-  if (channelSelect) {
-    channelSelect.addEventListener("change", (e) => {
-      if (e.target.value) {
-        if (player) player.destroy();
-        player = new HlsPlayer({ videoEl: video, src: e.target.value, onStatusChange: updateUIStatus });
-        player.load();
-      }
-    });
-  }
-
-  
   /* Accessible Keyboard Interactivity */
   window.addEventListener("keydown", (e) => {
     const isPlayerFocused = document.activeElement === video || document.activeElement === playerShell;
@@ -387,7 +369,7 @@ document.addEventListener("DOMContentLoaded", () => {
     switch (e.key) {
       case " ":
       case "k":
-        e.preventDefault(); // Stop webpage from jumping down
+        e.preventDefault(); 
         video.paused ? video.play() : video.pause();
         break;
       case "m":
@@ -408,7 +390,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Final garbage disposal
-  window.addEventListener("beforeunload", () => player.destroy());
+  window.addEventListener("beforeunload", () => {
+    if (player) player.destroy();
+  });
 });
-

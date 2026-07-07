@@ -1,4 +1,4 @@
 {
-  "version": "1.0.0",
+  "version": "1.1.0",
   "note": "Bump this string on every deploy so the update checker in github-enhancements.js can detect new releases."
 }

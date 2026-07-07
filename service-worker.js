@@ -15,13 +15,19 @@
   list of cached files, so old caches get cleaned up automatically.
 ------------------------------------------------------------ */
 
-const CACHE_NAME = "bs4k-shell-v1";
+const CACHE_NAME = "bs4k-shell-v2";
+// Relative (not absolute "/…") so this also works when the site is served
+// from a GitHub Pages project subpath (e.g. /BEST-SPORTS-4K/) rather than a
+// domain root — absolute paths would 404 in that case and silently break
+// the whole install step (cache.addAll rejects if any entry 404s).
 const APP_SHELL = [
-  "/",
-  "/index.html",
-  "/assets/css/github-enhancements.css",
-  "/assets/js/github-enhancements.js",
-  "/manifest.webmanifest"
+  "./",
+  "./index.html",
+  "./github-enhancements.css",
+  "./github-enhancements.js",
+  "./manifest.webmanifest",
+  "./assets/icons/icon-192.png",
+  "./assets/icons/icon-512.png"
 ];
 
 self.addEventListener("install", (event) => {
@@ -49,9 +55,13 @@ self.addEventListener("message", (event) => {
 self.addEventListener("fetch", (event) => {
   const url = new URL(event.request.url);
 
-  // Never cache API calls — live scores must always come from the network.
-  const isApiHost = /(^|\.)espn\.com$/.test(url.hostname) || /(^|\.)scorebat\.com$/.test(url.hostname);
-  if (isApiHost || event.request.method !== "GET") {
+  // Only ever cache-manage same-origin GET requests for our own static app
+  // shell. Everything else — ESPN score APIs, HLS playlists/segments from
+  // arbitrary streaming hosts, the channel source list, etc. — must always
+  // go straight to the network so scores/streams are never stale, and so we
+  // never attempt to store large/streaming media in Cache Storage.
+  const isSameOrigin = url.origin === self.location.origin;
+  if (!isSameOrigin || event.request.method !== "GET") {
     event.respondWith(fetch(event.request).catch(() => new Response(null, { status: 503 })));
     return;
   }

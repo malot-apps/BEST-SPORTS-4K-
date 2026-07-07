@@ -18,8 +18,8 @@
   github-enhancements.css for the banner styles.
 
   Include (at the end of <body>, after the widget's own script):
-    <link rel="stylesheet" href="assets/css/github-enhancements.css">
-    <script src="assets/js/github-enhancements.js" defer></script>
+    <link rel="stylesheet" href="github-enhancements.css">
+    <script src="github-enhancements.js" defer></script>
 ------------------------------------------------------------ */
 
 (function () {
@@ -31,7 +31,10 @@
   function registerServiceWorker() {
     if (!("serviceWorker" in navigator)) return;
     window.addEventListener("load", function () {
-      navigator.serviceWorker.register("/service-worker.js").then(function (reg) {
+      // Relative path (not "/service-worker.js") so this also works when the
+      // site is deployed under a GitHub Pages project subpath, e.g.
+      // https://USER.github.io/REPO/ instead of the domain root.
+      navigator.serviceWorker.register("service-worker.js").then(function (reg) {
         // Watch for a new worker taking over and surface it as an update banner.
         reg.addEventListener("updatefound", function () {
           const installing = reg.installing;

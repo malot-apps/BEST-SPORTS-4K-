@@ -235,7 +235,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // ২. মেইন ফাংশন: source.txt থেকে মেইন লিঙ্ক এনে গ্রিড কার্ড সাজিয়ে দেয়
   async function loadChannels() {
     try {
-      const sourceResponse = await fetch("./source.txt");
+      const sourceResponse = await fetch("../source.txt");
       const SOURCE_URL = (await sourceResponse.text()).trim();
 
       if (!SOURCE_URL || !SOURCE_URL.startsWith("http")) {

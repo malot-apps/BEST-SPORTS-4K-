@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reusable HLS Player — Reference Implementation</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <main>
+    <h1>Reusable HLS Player</h1>
+    <p class="note">
+      Reference implementation for GitHub. Swap <code>data-src</code> with your production-ready HLS stream URL (<code>.m3u8</code>).
+    </p>
+
+    <div class="player-wrap">
+      <div class="video-shell" id="playerShell" tabindex="0">
+        <span class="status-pill" id="statusPill">
+          <span class="dot"></span>
+          <span id="statusText">Idle</span>
+        </span>
+        
+        <video id="video" playsinline></video>
+        
+        <div class="overlay" id="overlay">
+          <div class="spinner"></div>
+          <div id="overlayText">Connecting to stream…</div>
+        </div>
+      </div>
+
+      <div class="controls">
+        <button id="btnPlay" type="button" aria-label="Toggle Play">▶ Play/Pause</button>
+        <button id="btnMute" type="button" aria-label="Toggle Mute">🔇 Mute</button>
+        <button id="btnPip" type="button" aria-label="Picture in Picture">⧉ PiP</button>
+        <button id="btnFullscreen" type="button" aria-label="Toggle Fullscreen">⛶ Fullscreen</button>
+        <button id="btnRetry" type="button" aria-label="Retry Stream">↻ Retry</button>
+      </div>
+
+      <footer class="hint">
+        <strong>Keyboard Shortcuts:</strong> <code>Space</code> / <code>k</code> (Play/Pause), <code>m</code> (Mute), <code>f</code> (Fullscreen), <code>p</code> (PiP), <code>←</code> / <code>→</code> (Seek 5s).
+      </footer>
+    </div>
+  </main>
+
+  <!-- hls.js Library CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hls.js/1.5.15/hls.min.js"></script>
+  <!-- Production Wrapper Script -->
+  <script src="player.js"></script>
+</body>
+</html>

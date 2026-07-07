@@ -6,22 +6,26 @@
 <title>Best Sport's 4K — FIFA World Cup 2026 Live Scores &amp; Schedule</title>
 <meta name="description" content="Live scores, upcoming fixtures, results, and point table for the FIFA World Cup 2026 and top football leagues, updated automatically.">
 
+<!-- Open Graph -->
 <meta property="og:type" content="website">
 <meta property="og:title" content="Best Sport's 4K — FIFA World Cup 2026 Live Scores">
 <meta property="og:description" content="Live scores, upcoming fixtures, results, and point table for the FIFA World Cup 2026 and top football leagues.">
-<meta property="og:url" content="https://YOUR-USERNAME.github.io/YOUR-REPO/">
-<meta property="og:image" content="https://YOUR-USERNAME.github.io/YOUR-REPO/assets/icons/icon-512.png">
+<meta property="og:url" content="https://malot-apps.github.io/BEST-SPORTS-4K/">
+<meta property="og:image" content="https://malot-apps.github.io/BEST-SPORTS-4K/assets/icons/icon-512.png">
 
+<!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Best Sport's 4K — FIFA World Cup 2026 Live Scores">
 <meta name="twitter:description" content="Live scores, upcoming fixtures, results, and point table for the FIFA World Cup 2026 and top football leagues.">
-<meta name="twitter:image" content="https://YOUR-USERNAME.github.io/YOUR-REPO/assets/icons/icon-512.png">
+<meta name="twitter:image" content="https://malot-apps.github.io/BEST-SPORTS-4K/assets/icons/icon-512.png">
 
+<!-- PWA -->
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#05060a">
 <link rel="icon" href="assets/icons/icon-source.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
 
+<!-- Structured data -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -35,6 +39,7 @@
 }
 </script>
 
+<!-- GitHub Pages Enhancement Styles -->
 <link rel="stylesheet" href="assets/css/github-enhancements.css">
 <link rel="stylesheet" href="Reusable HLS Video Player/style.css">
   
@@ -63,7 +68,7 @@
 #bs4k.light-theme .vs{background:#e7ebf3;color:#5a6376;}
 #bs4k.light-theme .badge.ft{background:#e7ebf3;color:#188a4c;}
 
-/* Focus visibility (accessibility) */
+/* Focus visibility */
 #bs4k a:focus-visible,
 #bs4k button:focus-visible,
 #bs4k [tabindex]:focus-visible{
@@ -82,14 +87,14 @@
 #bs4k .dot{width:8px;height:8px;border-radius:50%;background:var(--good);box-shadow:0 0 8px var(--good);animation:blink 1.2s infinite;}
 @keyframes blink{50%{opacity:.35}}
 
-/* Connection / health indicator */
+/* Connection status */
 #bs4k .net-status{display:inline-flex;align-items:center;gap:8px;padding:7px 14px;border-radius:20px;font-size:12px;font-weight:700;
   background:rgba(37,99,235,.12);border:1px solid rgba(37,99,235,.4);color:#8fb4ff;}
 #bs4k .net-status.offline{background:rgba(255,92,92,.12);border-color:rgba(255,92,92,.45);color:#ff9a9a;}
 #bs4k .net-dot{width:8px;height:8px;border-radius:50%;background:var(--blue);}
 #bs4k .net-status.offline .net-dot{background:var(--bad);}
 
-/* Settings trigger */
+/* Settings btn */
 #bs4k .settings-btn{background:var(--glass);border:1px solid var(--glass-brd);color:var(--text);width:38px;height:38px;
   border-radius:50%;font-size:16px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;}
 
@@ -225,16 +230,6 @@
 #bs4k .seg{display:flex;border:1px solid var(--glass-brd);border-radius:10px;overflow:hidden;}
 #bs4k .seg button{flex:1;padding:9px;background:transparent;border:none;color:var(--text);font-size:12px;font-weight:700;cursor:pointer;}
 #bs4k .seg button[aria-pressed="true"]{background:var(--cyan);color:#001318;}
-
-/* Toasts */
-#bs4k-toast-region{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);z-index:999999;
-  display:flex;flex-direction:column;gap:8px;width:min(360px,90vw);pointer-events:none;}
-.bs4k-toast{pointer-events:auto;background:rgba(12,15,24,.97);border:1px solid var(--glass-brd);border-left:4px solid var(--cyan);
-  color:#eef2f7;padding:12px 14px;border-radius:10px;font-size:13px;font-weight:600;box-shadow:0 10px 30px rgba(0,0,0,.4);
-  animation:toastIn .25s ease-out;}
-.bs4k-toast.error{border-left-color:var(--bad);}
-.bs4k-toast.success{border-left-color:var(--good);}
-@keyframes toastIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 </style>
 
 </head>
@@ -256,12 +251,14 @@
     <a class="tg" href="https://t.me/bestsports4k" target="_blank" rel="noopener noreferrer">✈️ Join our Telegram Channel</a>
   </div>
 
+  <!-- 24HRS Sports News Watch Live Button Component Container -->
   <div style="text-align: center; margin: 25px auto 15px; max-width:640px; padding:0 12px;">
     <button id="btnOpenNewsPlayer" type="button" style="background: linear-gradient(135deg, #ff007f, #7928ca); color: #fff; border: none; padding: 14px 24px; font-size: 15px; font-weight: 700; border-radius: 30px; cursor: pointer; box-shadow: 0 4px 15px rgba(255,0,127,0.3); transition: transform 0.2s, box-shadow 0.2s; text-transform: uppercase; letter-spacing: 0.05em; width: 100%;">
       📺 24HRS SPORTS NEWS WATCH LIVE
     </button>
   </div>
 
+  <!-- Unified HLS Stream Framework Block -->
   <div class="player-wrap" id="newsPlayerSection" style="display: none; margin-top: 15px; margin-bottom: 30px;">
     <div class="video-shell" id="playerShell" tabindex="0">
       <span class="status-pill" id="statusPill"><span class="dot"></span><span id="statusText">Idle</span></span>
@@ -334,6 +331,7 @@
     </div>
   </div>
 
+  <!-- Stats modal -->
   <div id="bs4k-stats-modal" class="modal-ov" role="dialog" aria-modal="true" aria-labelledby="bs4k-stats-title">
     <div class="modal-box">
       <div class="modal-head">
@@ -344,6 +342,7 @@
     </div>
   </div>
 
+  <!-- Settings modal -->
   <div id="bs4k-settings-modal" class="modal-ov" role="dialog" aria-modal="true" aria-labelledby="bs4k-settings-title">
     <div class="modal-box">
       <div class="modal-head">
@@ -378,6 +377,7 @@
   </div>
 </div>
 
+<!-- Toast region -->
 <div id="bs4k-toast-region" aria-live="polite" aria-atomic="true"></div>
 
 <script>
@@ -408,7 +408,7 @@
     } catch (e) { return { theme: "dark", lang: "en", motion: "on" }; }
   }
   function saveSettings(s) {
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(s)); } catch (e) { /* storage disabled */ }
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(s)); } catch (e) { /* disabled */ }
   }
 
   /* ---------- toasts ---------- */
@@ -461,15 +461,15 @@
   });
   applySettings();
 
-  /* ---------- sports news player toggle handling ---------- */
+  /* ---------- Live Stream Target Handler Block Fix ---------- */
   const btnOpenNewsPlayer = document.getElementById("btnOpenNewsPlayer");
   const newsPlayerSection = document.getElementById("newsPlayerSection");
-  if(btnOpenNewsPlayer && newsPlayerSection) {
-    btnOpenNewsPlayer.addEventListener("click", function() {
-      if(newsPlayerSection.style.display === "none") {
+  if (btnOpenNewsPlayer && newsPlayerSection) {
+    btnOpenNewsPlayer.addEventListener("click", function () {
+      if (newsPlayerSection.style.display === "none") {
         newsPlayerSection.style.display = "block";
         newsPlayerSection.scrollIntoView({ behavior: settings.motion === "reduced" ? "auto" : "smooth" });
-        toast("Sports News Player Opened", "success");
+        toast("Live Player Initialized", "success");
       } else {
         newsPlayerSection.style.display = "none";
       }
@@ -804,6 +804,7 @@
 })();
 </script>
 
+<!-- Dependencies & Core Implementation Modules -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/hls.js/1.5.15/hls.min.js"></script>
 <script src="Reusable HLS Video Player/player.js"></script>
 

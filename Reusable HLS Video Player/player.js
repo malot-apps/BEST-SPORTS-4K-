@@ -210,6 +210,88 @@ document.addEventListener("DOMContentLoaded", () => {
     } catch { /* Fail silently if unsupported */ }
   });
 
+    // --- ২৪ ঘণ্টা স্পোর্টস নিউজ বাটন ও চ্যানেল লোড লজিক ---
+  const btnOpenNewsPlayer = document.getElementById("btnOpenNewsPlayer");
+  const newsPlayerSection = document.getElementById("newsPlayerSection");
+  const channelSelect = document.getElementById("channelSelect");
+  let channelsLoaded = false;
+
+  async function loadChannels() {
+    try {
+      const response = await fetch("./channels/list.json");
+      const channels = await response.json();
+      
+      if (!channelSelect) return;
+      channelSelect.innerHTML = "";
+      
+      if(channels.length === 0) {
+        channelSelect.innerHTML = '<option value="">No channels available</option>';
+        return;
+      }
+
+      channels.forEach((channel) => {
+        const option = document.createElement("option");
+        option.value = channel.url;
+        option.textContent = channel.name;
+        channelSelect.appendChild(option);
+      });
+
+      // প্রথম চ্যানেলটি লোড করা
+      if (typeof playChannel === "function") {
+        playChannel(channels[0].url);
+      } else if (player) {
+        player.destroy();
+        player = new HlsPlayer({ videoEl: video, src: channels[0].url, onStatusChange: updateUIStatus });
+        player.load();
+      }
+      channelsLoaded = true;
+    } catch (error) {
+      console.error("Error loading channels:", error);
+      if (channelSelect) channelSelect.innerHTML = '<option value="">Failed to load channels</option>';
+    }
+  }
+
+  if (btnOpenNewsPlayer && newsPlayerSection) {
+    btnOpenNewsPlayer.addEventListener("click", () => {
+      if (newsPlayerSection.style.display === "none") {
+        newsPlayerSection.style.display = "block";
+        newsPlayerSection.scrollIntoView({ behavior: 'smooth' });
+        
+        if (!channelsLoaded) {
+          loadChannels();
+        } else if (video && video.paused && video.src) {
+          video.play().catch(() => {});
+        }
+        
+        btnOpenNewsPlayer.textContent = "❌ CLOSE SPORTS TV";
+        btnOpenNewsPlayer.style.background = "#334155";
+      } else {
+        newsPlayerSection.style.display = "none";
+        if (player) {
+          player.destroy();
+          channelsLoaded = false;
+        } else if (video) {
+          video.pause();
+          video.src = "";
+          channelsLoaded = false;
+        }
+        btnOpenNewsPlayer.textContent = "📺 24HRS SPORTS NEWS WATCH LIVE";
+        btnOpenNewsPlayer.style.background = "linear-gradient(135deg, #ff007f, #7928ca)";
+      }
+    });
+  }
+
+  if (channelSelect) {
+    channelSelect.addEventListener("change", (e) => {
+      if (e.target.value) {
+        if (player) player.destroy();
+        player = new HlsPlayer({ videoEl: video, src: e.target.value, onStatusChange: updateUIStatus });
+        player.load();
+      }
+    });
+  }
+
+  
   /* Accessible Keyboard Interactivity */
   window.addEventListener("keydown", (e) => {
     const isPlayerFocused = document.activeElement === video || document.activeElement === playerShell;

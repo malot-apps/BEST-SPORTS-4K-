@@ -342,13 +342,14 @@
     <button id="btnRetry" type="button">↻ Retry</button>
   </div>
 
-  <div class="channel-selector-wrap" style="margin-top: 15px;">
-    <label for="channelSelect" style="font-size: 13px; color: var(--muted); display: block; margin-bottom: 5px;">Select Channel:</label>
-    <select id="channelSelect" style="width: 100%; background: var(--panel); color: var(--text); border: 1px solid var(--border); padding: 10px; border-radius: 8px; font-weight: 600; outline: none; cursor: pointer;">
-      <option value="">Loading channels…</option>
-    </select>
+<div class="channel-grid-wrap" style="margin-top: 20px;">
+  <p style="font-size: 13px; color: #8a93a6; margin-bottom: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.03em;">📺 Select Channel to Watch:</p>
+  
+  <div id="channelGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 12px; max-height: 250px; overflow-y: auto; padding-right: 5px; scrollbar-width: thin;">
+    <div style="color: #8a93a6; font-size: 13px; padding: 20px; text-align: center; grid-column: 1/-1;">Loading channels…</div>
   </div>
 </div>
+
 
   
   <div class="section-title">

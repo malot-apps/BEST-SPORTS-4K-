@@ -6,26 +6,22 @@
 <title>Best Sport's 4K — FIFA World Cup 2026 Live Scores &amp; Schedule</title>
 <meta name="description" content="Live scores, upcoming fixtures, results, and point table for the FIFA World Cup 2026 and top football leagues, updated automatically.">
 
-<!-- Open Graph -->
 <meta property="og:type" content="website">
 <meta property="og:title" content="Best Sport's 4K — FIFA World Cup 2026 Live Scores">
 <meta property="og:description" content="Live scores, upcoming fixtures, results, and point table for the FIFA World Cup 2026 and top football leagues.">
 <meta property="og:url" content="https://YOUR-USERNAME.github.io/YOUR-REPO/">
 <meta property="og:image" content="https://YOUR-USERNAME.github.io/YOUR-REPO/assets/icons/icon-512.png">
 
-<!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Best Sport's 4K — FIFA World Cup 2026 Live Scores">
 <meta name="twitter:description" content="Live scores, upcoming fixtures, results, and point table for the FIFA World Cup 2026 and top football leagues.">
 <meta name="twitter:image" content="https://YOUR-USERNAME.github.io/YOUR-REPO/assets/icons/icon-512.png">
 
-<!-- PWA -->
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#05060a">
 <link rel="icon" href="assets/icons/icon-source.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
 
-<!-- Structured data -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -39,57 +35,8 @@
 }
 </script>
 
-<!-- GitHub Pages only enhancement styles (safe to remove for Blogger) -->
 <link rel="stylesheet" href="assets/css/github-enhancements.css">
 <link rel="stylesheet" href="Reusable HLS Video Player/style.css">
-  
-</head>
-<body>
-<!--
-  BEST SPORT'S 4K — Non-streaming widget bundle
-  =============================================
-  This file covers everything EXCEPT the live-stream player, playlist,
-  proxy, and channel-list logic. That part is intentionally left out —
-  keep your existing (untouched) stream module and just make sure it
-  defines a global `window.openStreamPlayer(matchTitle)` function.
-  This widget calls that hook when someone taps "Watch Live"; it never
-  loads or parses any playlist itself.
-
-  Drop this into a Blogger HTML/JavaScript gadget. It's self-contained
-  (scoped under #bs4k) so it won't collide with your theme's CSS/JS.
--->
-<div style="text-align: center; margin: 25px 0 15px;">
-  <button id="btnOpenNewsPlayer" type="button" style="background: linear-gradient(135deg, #ff007f, #7928ca); color: #fff; border: none; padding: 14px 24px; font-size: 15px; font-weight: 700; border-radius: 30px; cursor: pointer; box-shadow: 0 4px 15px rgba(255,0,127,0.3); transition: transform 0.2s, box-shadow 0.2s; text-transform: uppercase; letter-spacing: 0.05em; width: 100%; max-width: 400px;">
-    📺 24HRS SPORTS NEWS WATCH LIVE
-  </button>
-</div>
-
-<div class="player-wrap" id="newsPlayerSection" style="display: none; margin-top: 15px; margin-bottom: 30px;">
-  <div class="video-shell" id="playerShell" tabindex="0">
-    <span class="status-pill" id="statusPill"><span class="dot"></span><span id="statusText">Idle</span></span>
-    <video id="video" playsinline></video>
-    <div class="overlay" id="overlay">
-      <div class="spinner"></div>
-      <div id="overlayText">Connecting to stream…</div>
-    </div>
-  </div>
-
-  <div class="controls">
-    <button id="btnPlay" type="button">▶ Play/Pause</button>
-    <button id="btnMute" type="button">🔇 Mute</button>
-    <button id="btnPip" type="button">⧉ PiP</button>
-    <button id="btnFullscreen" type="button">⛶ Fullscreen</button>
-    <button id="btnRetry" type="button">↻ Retry</button>
-  </div>
-
-  <div class="channel-grid-wrap" style="margin-top: 20px;">
-    <p style="font-size: 13px; color: #8a93a6; margin-bottom: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.03em;">📺 Select Channel to Watch:</p>
-    <div id="channelGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 12px; max-height: 250px; overflow-y: auto; padding-right: 5px; scrollbar-width: thin;">
-      <div style="color: #8a93a6; font-size: 13px; padding: 20px; text-align: center; grid-column: 1/-1;">Loading channels…</div>
-    </div>
-  </div>
-</div>
-
   
 <style>
 :root{
@@ -108,7 +55,7 @@
 /* Respect reduced-motion preference site-wide */
 #bs4k.reduce-motion *{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important;}
 
-/* Light theme override (toggle adds .light-theme on #bs4k) */
+/* Light theme override */
 #bs4k.light-theme{
   --bg:#f4f6fa; --bg2:#ffffff; --glass:rgba(10,15,25,.04); --glass-brd:rgba(10,15,25,.09);
   --text:#12151c; --muted:#5a6376;
@@ -183,7 +130,7 @@
   text-shadow:0 0 10px rgba(255,255,255,.2);font-variant-numeric:tabular-nums;}
 #bs4k .cd-kick{color:var(--muted);font-size:11px;font-weight:600;}
 
-/* Tabs (proper tablist semantics) */
+/* Tabs */
 #bs4k .tabs{display:flex;gap:8px;overflow-x:auto;padding:4px 12px 14px;max-width:640px;margin:0 auto;scrollbar-width:none;}
 #bs4k .tabs::-webkit-scrollbar{display:none;}
 #bs4k .tab{flex:0 0 auto;padding:10px 16px;border-radius:30px;font-size:13px;font-weight:700;white-space:nowrap;
@@ -237,14 +184,21 @@
 #bs4k .std-table .t-left{text-align:left;display:flex;align-items:center;gap:8px;font-weight:700;}
 #bs4k .std-table img{width:22px;height:22px;border-radius:50%;}
 
-/* Section titles */
-#bs4k .section-title{text-align:center;margin:26px 0 14px;}
-#bs4k .section-title h2{margin:0;font-size:18px;font-weight:900;letter-spacing:1px;}
-#bs4k .section-title p{margin:4px 0 0;color:var(--muted);font-size:12px;}
-#bs4k .scorebat-wrap{max-width:640px;margin:0 auto;padding:12px;border-radius:16px;overflow:hidden;}
+/* Custom Sports News Player Layout UI Styles */
+.player-wrap { width: 100%; max-width: 640px; margin: 0 auto; padding: 12px; }
+.video-shell { width: 100%; aspect-ratio: 16/9; background: #000; position: relative; border-radius: 12px; overflow: hidden; }
+.status-pill { position: absolute; top: 12px; left: 12px; background: rgba(0,0,0,0.6); padding: 5px 10px; border-radius: 20px; font-size: 11px; display: inline-flex; align-items: center; gap: 6px; z-index: 10; color: #fff; }
+.video-shell video { width: 100%; height: 100%; object-fit: contain; }
+.overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.75); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 5; color: #fff; font-size: 14px; gap: 10px; }
+.spinner { width: 30px; height: 30px; border: 3px solid rgba(255,255,255,0.1); border-top-color: var(--cyan); border-radius: 50%; animation: spin 1s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.controls { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; justify-content: center; }
+.controls button { background: var(--glass); border: 1px solid var(--glass-brd); color: var(--text); padding: 8px 16px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; transition: background 0.2s; }
+.controls button:hover { background: rgba(255,255,255,0.1); }
+
 #bs4k .clock-bar{text-align:center;color:var(--cyan);font-size:12.5px;letter-spacing:1px;margin-top:4px;font-variant-numeric:tabular-nums;}
 
-/* Modals (shared shell for Stats + Settings) */
+/* Modals */
 #bs4k .modal-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);backdrop-filter:blur(6px);z-index:99999;
   align-items:center;justify-content:center;padding:20px;}
 #bs4k .modal-ov.active{display:flex;}
@@ -283,6 +237,9 @@
 @keyframes toastIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 </style>
 
+</head>
+<body>
+
 <div id="bs4k" role="region" aria-label="Live football scores and schedule">
   <div class="brand">
     <h1>BEST SPORT'S 4K</h1>
@@ -297,6 +254,38 @@
   <div class="social">
     <a class="fb" href="https://www.facebook.com/share/1Ec6vt7BXf/" target="_blank" rel="noopener noreferrer">📘 Follow our Facebook Page</a>
     <a class="tg" href="https://t.me/bestsports4k" target="_blank" rel="noopener noreferrer">✈️ Join our Telegram Channel</a>
+  </div>
+
+  <div style="text-align: center; margin: 25px auto 15px; max-width:640px; padding:0 12px;">
+    <button id="btnOpenNewsPlayer" type="button" style="background: linear-gradient(135deg, #ff007f, #7928ca); color: #fff; border: none; padding: 14px 24px; font-size: 15px; font-weight: 700; border-radius: 30px; cursor: pointer; box-shadow: 0 4px 15px rgba(255,0,127,0.3); transition: transform 0.2s, box-shadow 0.2s; text-transform: uppercase; letter-spacing: 0.05em; width: 100%;">
+      📺 24HRS SPORTS NEWS WATCH LIVE
+    </button>
+  </div>
+
+  <div class="player-wrap" id="newsPlayerSection" style="display: none; margin-top: 15px; margin-bottom: 30px;">
+    <div class="video-shell" id="playerShell" tabindex="0">
+      <span class="status-pill" id="statusPill"><span class="dot"></span><span id="statusText">Idle</span></span>
+      <video id="video" playsinline></video>
+      <div class="overlay" id="overlay">
+        <div class="spinner"></div>
+        <div id="overlayText">Connecting to stream…</div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button id="btnPlay" type="button">▶ Play/Pause</button>
+      <button id="btnMute" type="button">🔇 Mute</button>
+      <button id="btnPip" type="button">⧉ PiP</button>
+      <button id="btnFullscreen" type="button">⛶ Fullscreen</button>
+      <button id="btnRetry" type="button">↻ Retry</button>
+    </div>
+
+    <div class="channel-grid-wrap" style="margin-top: 20px;">
+      <p style="font-size: 13px; color: #8a93a6; margin-bottom: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.03em;">📺 Select Channel to Watch:</p>
+      <div id="channelGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 12px; max-height: 250px; overflow-y: auto; padding-right: 5px; scrollbar-width: thin;">
+        <div style="color: #8a93a6; font-size: 13px; padding: 20px; text-align: center; grid-column: 1/-1;">Loading channels…</div>
+      </div>
+    </div>
   </div>
 
   <button class="scroll-cue" id="bs4k-scroll-cue" type="button">
@@ -345,47 +334,6 @@
     </div>
   </div>
 
-
-  
-<div style="text-align: center; margin: 20px 0;">
-  <button id="btnOpenNewsPlayer" type="button" style="background: linear-gradient(135deg, #ff007f, #7928ca); color: #fff; border: none; padding: 14px 24px; font-size: 14px; font-weight: 700; border-radius: 30px; cursor: pointer; box-shadow: 0 4px 15px rgba(255,0,127,0.3); transition: transform 0.2s, box-shadow 0.2s; text-transform: uppercase; letter-spacing: 0.05em;">
-    📺 24HRS SPORTS NEWS WATCH LIVE
-  </button>
-</div>
-
-<div class="player-wrap" id="newsPlayerSection" style="display: none; margin-top: 20px;">
-  <div class="video-shell" id="playerShell" tabindex="0">
-    <span class="status-pill" id="statusPill">
-      <span class="dot"></span>
-      <span id="statusText">Idle</span>
-    </span>
-    
-    <video id="video" playsinline></video>
-    
-    <div class="overlay" id="overlay">
-      <div class="spinner"></div>
-      <div id="overlayText">Connecting to stream…</div>
-    </div>
-  </div>
-
-  <div class="controls">
-    <button id="btnPlay" type="button">▶ Play/Pause</button>
-    <button id="btnMute" type="button">🔇 Mute</button>
-    <button id="btnPip" type="button">⧉ PiP</button>
-    <button id="btnFullscreen" type="button">⛶ Fullscreen</button>
-    <button id="btnRetry" type="button">↻ Retry</button>
-  </div>
-
-<div class="channel-grid-wrap" style="margin-top: 20px;">
-  <p style="font-size: 13px; color: #8a93a6; margin-bottom: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.03em;">📺 Select Channel to Watch:</p>
-  
-  <div id="channelGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 12px; max-height: 250px; overflow-y: auto; padding-right: 5px; scrollbar-width: thin;">
-    <div style="color: #8a93a6; font-size: 13px; padding: 20px; text-align: center; grid-column: 1/-1;">Loading channels…</div>
-  </div>
-</div>
-
-
-  <!-- Stats modal -->
   <div id="bs4k-stats-modal" class="modal-ov" role="dialog" aria-modal="true" aria-labelledby="bs4k-stats-title">
     <div class="modal-box">
       <div class="modal-head">
@@ -396,7 +344,6 @@
     </div>
   </div>
 
-  <!-- Settings modal -->
   <div id="bs4k-settings-modal" class="modal-ov" role="dialog" aria-modal="true" aria-labelledby="bs4k-settings-title">
     <div class="modal-box">
       <div class="modal-head">
@@ -431,14 +378,13 @@
   </div>
 </div>
 
-<!-- Toast region (screen-reader friendly) -->
 <div id="bs4k-toast-region" aria-live="polite" aria-atomic="true"></div>
 
 <script>
 (function () {
   "use strict";
 
-  /* ---------- tiny safe helpers (XSS-safe DOM building; no innerHTML with data) ---------- */
+  /* ---------- tiny safe helpers ---------- */
   function el(tag, attrs, children) {
     const node = document.createElement(tag);
     if (attrs) {
@@ -453,7 +399,7 @@
   }
   function clear(node) { while (node.firstChild) node.removeChild(node.firstChild); }
 
-  /* ---------- local storage (safe wrapper; Blogger allows same-origin storage) ---------- */
+  /* ---------- local storage ---------- */
   const STORAGE_KEY = "bs4k-settings-v1";
   function loadSettings() {
     try {
@@ -462,7 +408,7 @@
     } catch (e) { return { theme: "dark", lang: "en", motion: "on" }; }
   }
   function saveSettings(s) {
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(s)); } catch (e) { /* storage disabled — ignore */ }
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(s)); } catch (e) { /* storage disabled */ }
   }
 
   /* ---------- toasts ---------- */
@@ -514,6 +460,21 @@
     });
   });
   applySettings();
+
+  /* ---------- sports news player toggle handling ---------- */
+  const btnOpenNewsPlayer = document.getElementById("btnOpenNewsPlayer");
+  const newsPlayerSection = document.getElementById("newsPlayerSection");
+  if(btnOpenNewsPlayer && newsPlayerSection) {
+    btnOpenNewsPlayer.addEventListener("click", function() {
+      if(newsPlayerSection.style.display === "none") {
+        newsPlayerSection.style.display = "block";
+        newsPlayerSection.scrollIntoView({ behavior: settings.motion === "reduced" ? "auto" : "smooth" });
+        toast("Sports News Player Opened", "success");
+      } else {
+        newsPlayerSection.style.display = "none";
+      }
+    });
+  }
 
   /* ---------- online / offline detection ---------- */
   const netStatus = document.getElementById("bs4k-net-status");
@@ -586,8 +547,6 @@
     if (isLive(f)) {
       const watchBtn = el("button", { class: "watch-btn", type: "button", text: "▶ Watch Live" });
       watchBtn.addEventListener("click", function () {
-        // Hook only — the actual player/stream module lives in your separate,
-        // already-working script and must define window.openStreamPlayer.
         if (typeof window.openStreamPlayer === "function") {
           window.openStreamPlayer(f.teams.home.name + " vs " + f.teams.away.name, f.id);
         } else {
@@ -800,7 +759,7 @@
     }
   }
 
-  /* ---------- tabs (keyboard-navigable, ARIA tablist pattern) ---------- */
+  /* ---------- tabs functionality ---------- */
   function switchTab(tab) {
     tabOrder.forEach(function (t) {
       const btn = document.getElementById("bs4k-tabbtn-" + t);
@@ -823,7 +782,7 @@
     });
   });
 
-  /* ---------- clock + countdown ticker (single interval, not one per widget) ---------- */
+  /* ---------- clock + countdown ticker ---------- */
   setInterval(function () {
     document.getElementById("bs4k-clock").textContent = new Date().toLocaleString("en-US", {
       timeZone: "Asia/Dhaka", weekday: "short", month: "short", day: "2-digit", hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: true
@@ -836,7 +795,7 @@
     });
   }, 1000);
 
-  /* ---------- viewer counter (cosmetic, unrelated to streaming) ---------- */
+  /* ---------- viewer counter ---------- */
   document.getElementById("bs4k-viewers").textContent =
     (Math.floor(Math.random() * (20000 - 10000 + 1)) + 10000).toLocaleString() + " watching now";
 
@@ -845,7 +804,6 @@
 })();
 </script>
 
-<!-- GitHub Pages only enhancements: service worker, install prompt, update checker -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/hls.js/1.5.15/hls.min.js"></script>
 <script src="Reusable HLS Video Player/player.js"></script>
 

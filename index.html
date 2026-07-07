@@ -189,17 +189,17 @@
 #bs4k .std-table .t-left{text-align:left;display:flex;align-items:center;gap:8px;font-weight:700;}
 #bs4k .std-table img{width:22px;height:22px;border-radius:50%;}
 
-/* Custom Sports News Player Layout UI Styles */
-.player-wrap { width: 100%; max-width: 640px; margin: 0 auto; padding: 12px; }
-.video-shell { width: 100%; aspect-ratio: 16/9; background: #000; position: relative; border-radius: 12px; overflow: hidden; }
-.status-pill { position: absolute; top: 12px; left: 12px; background: rgba(0,0,0,0.6); padding: 5px 10px; border-radius: 20px; font-size: 11px; display: inline-flex; align-items: center; gap: 6px; z-index: 10; color: #fff; }
-.video-shell video { width: 100%; height: 100%; object-fit: contain; }
-.overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.75); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 5; color: #fff; font-size: 14px; gap: 10px; }
-.spinner { width: 30px; height: 30px; border: 3px solid rgba(255,255,255,0.1); border-top-color: var(--cyan); border-radius: 50%; animation: spin 1s linear infinite; }
+/* Enhanced Native Video Engine Layout Styles (Force Display Overlay Overrides) */
+.player-wrap { width: 100%; max-width: 640px; margin: 0 auto; padding: 12px; clear: both; }
+.video-shell { width: 100%; aspect-ratio: 16/9; background: #000000 !important; position: relative; border-radius: 12px; overflow: hidden; display: block !important; border: 1px solid rgba(0,229,255,0.2); }
+.status-pill { position: absolute; top: 12px; left: 12px; background: rgba(0,0,0,0.7); padding: 5px 12px; border-radius: 20px; font-size: 11px; display: inline-flex !important; align-items: center; gap: 6px; z-index: 99; color: #fff; }
+.video-shell video { width: 100% !important; height: 100% !important; object-fit: contain; background: #000; display: block; }
+.overlay { position: absolute; inset: 0; background: rgba(5,6,10,0.85); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 90; color: #fff; font-size: 14px; gap: 10px; }
+.spinner { width: 35px; height: 35px; border: 3px solid rgba(255,255,255,0.1); border-top-color: var(--cyan); border-radius: 50%; animation: spin 1s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
-.controls { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; justify-content: center; }
-.controls button { background: var(--glass); border: 1px solid var(--glass-brd); color: var(--text); padding: 8px 16px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; transition: background 0.2s; }
-.controls button:hover { background: rgba(255,255,255,0.1); }
+.controls { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; justify-content: center; }
+.controls button { background: var(--glass); border: 1px solid var(--glass-brd); color: var(--text); padding: 9px 16px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; transition: background 0.2s; }
+.controls button:hover { background: rgba(255,255,255,0.1); border-color: var(--cyan); }
 
 #bs4k .clock-bar{text-align:center;color:var(--cyan);font-size:12.5px;letter-spacing:1px;margin-top:4px;font-variant-numeric:tabular-nums;}
 
@@ -251,15 +251,15 @@
     <a class="tg" href="https://t.me/bestsports4k" target="_blank" rel="noopener noreferrer">✈️ Join our Telegram Channel</a>
   </div>
 
-  <!-- 24HRS Sports News Watch Live Button Component Container -->
+  <!-- Unified Watch Live Interactive Control Button Container -->
   <div style="text-align: center; margin: 25px auto 15px; max-width:640px; padding:0 12px;">
     <button id="btnOpenNewsPlayer" type="button" style="background: linear-gradient(135deg, #ff007f, #7928ca); color: #fff; border: none; padding: 14px 24px; font-size: 15px; font-weight: 700; border-radius: 30px; cursor: pointer; box-shadow: 0 4px 15px rgba(255,0,127,0.3); transition: transform 0.2s, box-shadow 0.2s; text-transform: uppercase; letter-spacing: 0.05em; width: 100%;">
       📺 24HRS SPORTS NEWS WATCH LIVE
     </button>
   </div>
 
-  <!-- Unified HLS Stream Framework Block -->
-  <div class="player-wrap" id="newsPlayerSection" style="display: none; margin-top: 15px; margin-bottom: 30px;">
+  <!-- Reusable HLS Stream Content Component Container Frame (Overridden Force Style Toggle Layout) -->
+  <div class="player-wrap" id="newsPlayerSection" style="display: none !important; margin-top: 15px; margin-bottom: 30px;">
     <div class="video-shell" id="playerShell" tabindex="0">
       <span class="status-pill" id="statusPill"><span class="dot"></span><span id="statusText">Idle</span></span>
       <video id="video" playsinline></video>
@@ -461,17 +461,22 @@
   });
   applySettings();
 
-  /* ---------- Live Stream Target Handler Block Fix ---------- */
+  /* ---------- Absolute JS Style & Display Engine Override Fix ---------- */
   const btnOpenNewsPlayer = document.getElementById("btnOpenNewsPlayer");
   const newsPlayerSection = document.getElementById("newsPlayerSection");
+  
   if (btnOpenNewsPlayer && newsPlayerSection) {
-    btnOpenNewsPlayer.addEventListener("click", function () {
-      if (newsPlayerSection.style.display === "none") {
-        newsPlayerSection.style.display = "block";
-        newsPlayerSection.scrollIntoView({ behavior: settings.motion === "reduced" ? "auto" : "smooth" });
-        toast("Live Player Initialized", "success");
+    // Force reset attributes on dynamic render
+    newsPlayerSection.style.setProperty("display", "none", "important");
+    
+    btnOpenNewsPlayer.addEventListener("click", function (e) {
+      e.preventDefault();
+      if (newsPlayerSection.style.getPropertyValue("display") === "none") {
+        newsPlayerSection.style.setProperty("display", "block", "important");
+        newsPlayerSection.scrollIntoView({ behavior: settings.motion === "reduced" ? "auto" : "smooth", block: "start" });
+        toast("Live Stream Running", "success");
       } else {
-        newsPlayerSection.style.display = "none";
+        newsPlayerSection.style.setProperty("display", "none", "important");
       }
     });
   }
@@ -804,7 +809,7 @@
 })();
 </script>
 
-<!-- Dependencies & Core Implementation Modules -->
+<!-- Dependencies & Native Functional HLS Player Initialization Modules -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/hls.js/1.5.15/hls.min.js"></script>
 <script src="Reusable HLS Video Player/player.js"></script>
 

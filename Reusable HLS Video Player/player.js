@@ -216,40 +216,128 @@ document.addEventListener("DOMContentLoaded", () => {
   const channelSelect = document.getElementById("channelSelect");
   let channelsLoaded = false;
 
+   // ১. .m3u প্লেলিস্ট ফাইল ভেঙে নাম ও লিঙ্ক আলাদা করার সহকারী ফাংশন
+  function parseM3U(data) {
+    const lines = data.split('\n');
+    const channels = [];
+    let currentName = '';
+
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i].trim();
+      if (line.startsWith('#EXTINF:')) {
+        const nameParts = line.split(',');
+        currentName = nameParts[nameParts.length - 1].trim();
+      } else if (line.startsWith('http')) {
+        channels.push({
+          name: currentName || `Channel ${channels.length + 1}`,
+          url: line
+        });
+        currentName = '';
+      }
+    }
+    return channels;
+  }
+
+  // ২. মেইন ফাংশন: যা ডাটা এনে স্ক্রিনে সুন্দর গ্রিড কার্ড সাজিয়ে দেয়
   async function loadChannels() {
+    const SOURCE_URL = "https://iptv-org.github.io/iptv/categories/sports.m3u"; 
+    
     try {
-      const response = await fetch("./channels/list.json");
-      const channels = await response.json();
+      const response = await fetch(SOURCE_URL);
+      const textData = await response.text();
+      let channels = [];
+
+      const channelGrid = document.getElementById("channelGrid");
+      if (!channelGrid) return;
+
+      // লিঙ্ক চেক করে ডাটা পার্স করা (JSON নাকি M3U তা নিজে বুঝবে)
+      if (SOURCE_URL.endsWith('.m3u') || textData.includes('#EXTM3U')) {
+        channels = parseM3U(textData);
+      } else {
+        channels = JSON.parse(textData);
+      }
       
-      if (!channelSelect) return;
-      channelSelect.innerHTML = "";
+      channelGrid.innerHTML = "";
       
       if(channels.length === 0) {
-        channelSelect.innerHTML = '<option value="">No channels available</option>';
+        channelGrid.innerHTML = '<div style="color:var(--bad); text-align:center; grid-column:1/-1;">No channels found</div>';
         return;
       }
 
+      // লুপ চালিয়ে প্রতিটা চ্যানেলের জন্য প্রিমিয়াম অ্যাপ স্টাইল কার্ড বানানো
       channels.forEach((channel) => {
-        const option = document.createElement("option");
-        option.value = channel.url;
-        option.textContent = channel.name;
-        channelSelect.appendChild(option);
+        const card = document.createElement("div");
+        
+        // কার্ডের স্টাইলিং (লুক অ্যান্ড ফিল)
+        card.style.background = "rgba(255, 255, 255, 0.04)";
+        card.style.border = "1px solid rgba(255, 255, 255, 0.08)";
+        card.style.borderRadius = "12px";
+        card.style.padding = "12px 8px";
+        card.style.textAlign = "center";
+        card.style.cursor = "pointer";
+        card.style.transition = "transform 0.2s, background 0.2s, border-color 0.2s";
+        card.style.display = "flex";
+        card.style.flexDirection = "column";
+        card.style.alignItems = "center";
+        card.style.justifyContent = "center";
+        card.style.minHeight = "80px";
+        
+        card.innerHTML = `
+          <div style="font-size: 20px; margin-bottom: 6px;">📺</div>
+          <div style="font-size: 11px; font-weight: 700; color: #eef2f7; line-height: 1.3; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">
+            ${channel.name}
+          </div>
+        `;
+
+        // হোভার ইফেক্টস
+        card.addEventListener("mouseenter", () => {
+          card.style.background = "rgba(0, 229, 255, 0.1)";
+          card.style.borderColor = "var(--accent)";
+          card.style.transform = "scale(1.03)";
+        });
+        card.addEventListener("mouseleave", () => {
+          card.style.background = "rgba(255, 255, 255, 0.04)";
+          card.style.borderColor = "rgba(255, 255, 255, 0.08)";
+          card.style.transform = "scale(1)";
+        });
+
+        // ক্লিকে প্লেয়ার লোড করার লজিক
+        card.addEventListener("click", () => {
+          Array.from(channelGrid.children).forEach(c => {
+            c.style.boxShadow = "none";
+            c.style.background = "rgba(255, 255, 255, 0.04)";
+          });
+          
+          card.style.background = "rgba(0, 229, 255, 0.15)";
+          card.style.boxShadow = "0 0 0 2px var(--accent)";
+          
+          playChannel(channel.url);
+        });
+
+        channelGrid.appendChild(card);
       });
 
-      // প্রথম চ্যানেলটি লোড করা
-      if (typeof playChannel === "function") {
-        playChannel(channels[0].url);
-      } else if (player) {
-        player.destroy();
-        player = new HlsPlayer({ videoEl: video, src: channels[0].url, onStatusChange: updateUIStatus });
-        player.load();
+      // প্রথম চ্যানেলটি অটো-প্লে ট্রিগার করা
+      if (channelGrid.children.length > 0) {
+        channelGrid.children[0].click();
       }
+      
       channelsLoaded = true;
+
     } catch (error) {
       console.error("Error loading channels:", error);
-      if (channelSelect) channelSelect.innerHTML = '<option value="">Failed to load channels</option>';
+      const channelGrid = document.getElementById("channelGrid");
+      if (channelGrid) channelGrid.innerHTML = '<div style="color:var(--bad); text-align:center; grid-column:1/-1;">Failed to load channels</div>';
     }
   }
+
+  // ৩. প্লেয়ার স্টার্ট করার ফাংশন
+  function playChannel(url) {
+    if (player) player.destroy();
+    player = new HlsPlayer({ videoEl: video, src: url, onStatusChange: updateUIStatus });
+    player.load();
+  }
+
 
   if (btnOpenNewsPlayer && newsPlayerSection) {
     btnOpenNewsPlayer.addEventListener("click", () => {

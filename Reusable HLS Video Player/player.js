@@ -213,7 +213,6 @@ document.addEventListener("DOMContentLoaded", () => {
     // --- ২৪ ঘণ্টা স্পোর্টস নিউজ বাটন ও চ্যানেল লোড লজিক ---
   const btnOpenNewsPlayer = document.getElementById("btnOpenNewsPlayer");
   const newsPlayerSection = document.getElementById("newsPlayerSection");
-  const channelSelect = document.getElementById("channelSelect");
   let channelsLoaded = false;
 
    // ১. .m3u প্লেলিস্ট ফাইল ভেঙে নাম ও লিঙ্ক আলাদা করার সহকারী ফাংশন

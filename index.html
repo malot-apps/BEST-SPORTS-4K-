@@ -311,6 +311,46 @@
     </div>
   </div>
 
+
+  
+<div style="text-align: center; margin: 20px 0;">
+  <button id="btnOpenNewsPlayer" type="button" style="background: linear-gradient(135deg, #ff007f, #7928ca); color: #fff; border: none; padding: 14px 24px; font-size: 14px; font-weight: 700; border-radius: 30px; cursor: pointer; box-shadow: 0 4px 15px rgba(255,0,127,0.3); transition: transform 0.2s, box-shadow 0.2s; text-transform: uppercase; letter-spacing: 0.05em;">
+    📺 24HRS SPORTS NEWS WATCH LIVE
+  </button>
+</div>
+
+<div class="player-wrap" id="newsPlayerSection" style="display: none; margin-top: 20px;">
+  <div class="video-shell" id="playerShell" tabindex="0">
+    <span class="status-pill" id="statusPill">
+      <span class="dot"></span>
+      <span id="statusText">Idle</span>
+    </span>
+    
+    <video id="video" playsinline></video>
+    
+    <div class="overlay" id="overlay">
+      <div class="spinner"></div>
+      <div id="overlayText">Connecting to stream…</div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button id="btnPlay" type="button">▶ Play/Pause</button>
+    <button id="btnMute" type="button">🔇 Mute</button>
+    <button id="btnPip" type="button">⧉ PiP</button>
+    <button id="btnFullscreen" type="button">⛶ Fullscreen</button>
+    <button id="btnRetry" type="button">↻ Retry</button>
+  </div>
+
+  <div class="channel-selector-wrap" style="margin-top: 15px;">
+    <label for="channelSelect" style="font-size: 13px; color: var(--muted); display: block; margin-bottom: 5px;">Select Channel:</label>
+    <select id="channelSelect" style="width: 100%; background: var(--panel); color: var(--text); border: 1px solid var(--border); padding: 10px; border-radius: 8px; font-weight: 600; outline: none; cursor: pointer;">
+      <option value="">Loading channels…</option>
+    </select>
+  </div>
+</div>
+
+  
   <div class="section-title">
     <h2>🎬 FIFA World Cup Highlights</h2>
     <p>Watch recent goals &amp; full match highlights from the 2026 World Cup</p>
